@@ -195,7 +195,7 @@ fi
 
 # Dotfiles
 printf "${BLUE} ➜  Installing Dotfiles...${NORMAL}\n"
-sync_repo seagle0128/dotfiles $DOTFILES
+sync_repo louiszgm/dotfiles $DOTFILES
 
 chmod +x $DOTFILES/install.sh
 chmod +x $DOTFILES/install_brew_cask.sh
@@ -229,7 +229,7 @@ fi
 
 # Emacs Configs
 printf "${BLUE} ➜  Installing Centaur Emacs...${NORMAL}\n"
-sync_repo seagle0128/.emacs.d $EMACSD
+sync_repo louiszgm/emacs.d $EMACSD
 
 # Oh My Tmux
 printf "${BLUE} ➜  Installing Oh My Tmux...${NORMAL}\n"
