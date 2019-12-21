@@ -25,17 +25,18 @@ export PATH=${GOPATH//://bin:}/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
 # ======= This is personal env ================
 # Android
-export ANDROID_HOME=$HOME/Library/Android/sdk:$PATH
-export ANDROID_TOOLS=$ANDROID_HOME/tools:$PATH
-export ANDROID_PLATFORM_TOOLS=$ANDROID_HOME/platform-tools:$PATH
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export ANDROID_TOOLS=$ANDROID_HOME/tools
+export ANDROID_PLATFORM_TOOLS=$ANDROID_HOME/platform-tools
+export PATH=$ANDROID_HOME:$ANDROID_TOOLS:$ANDROID_PLATFORM_TOOLS:$PATH
 
 #Java
-export JAVA_HOME=/Applications/Android\ Studio.app/Contents/jre/jdk/Contents/Home:$PATH
-export PATH=$JAVA_HOME/bin:$PATH
+export JAVA_HOME=/Applications/Android\ Studio.app/Contents/jre/jdk/Contents/Home
+export PATH=$JAVA_HOME:$JAVA_HOME/bin:$PATH
 
 #Flutter
-export Flutter_HOME=$HOME/flutter:$PATH
-export PATH=$Flutter_HOME/bin:$PATH
+export Flutter_HOME=$HOME/flutter
+export PATH=$Flutter_HOME:$Flutter_HOME/bin:$PATH
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
