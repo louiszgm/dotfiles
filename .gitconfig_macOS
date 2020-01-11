@@ -2,8 +2,8 @@
 [include]
 	path = ~/.gitconfig_global
 [user]
-	name =
-	email =
+	name = zouguiming
+	email = zouguiming@yy.com
 [credential]
 	helper = osxkeychain
 [github]

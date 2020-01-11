@@ -228,7 +228,7 @@ if [ "$OSTYPE" = "cygwin" ]; then
 fi
 
 # Emacs Configs
-printf "${BLUE} ➜  Installing Centaur Emacs...${NORMAL}\n"
+printf "${BLUE} ➜  Installing Emacs...${NORMAL}\n"
 sync_repo louiszgm/emacs.d $EMACSD
 
 # Oh My Tmux
