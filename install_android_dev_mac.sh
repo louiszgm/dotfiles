@@ -1,36 +1,8 @@
 #!/bin/bash
 #############################################################
-# Install macOS via brew cask
-# Author: Vincent Zhang <seagle0128@gmail.com>
-# URL: https://github.com/seagle0128/dotfiles
+# Install Android Dev Env via brew cask
+# Author: zouguiming <louiszgm@gmail.com>
 #############################################################
-
-# Cask applications
-apps=(
-    cheatsheet
-    fliqlo        # Screen Saver
-    iterm2
-    shadowsocksx-ng
-    google-chrome
-    # licecap       # Recording screen as gif
-    # keycastr      # Show keys on the screen
-    # mos           # Smooth and reverse scroll. Alternative: scroll-reverser
-    # shiftit       # Window management. Alternative: spectacle
-    # vanilla       # Hide menu bar icons. Alternative: bartender
-
-    # Development
-    emacs
-    visual-studio-code
-    docker
-    java
-
-    # Utilities
-    alfred
-    1password
-    setapp
-    baidunetdisk
-    neteasemusic
-)
 
 # Use colors, but only if connected to a terminal, and that terminal
 # supports them.
@@ -52,6 +24,19 @@ else
     BOLD=""
     NORMAL=""
 fi
+
+# Cask applications
+# why not need ndk, see this: https://github.com/Homebrew/homebrew-cask/issues/58883
+caskapps = (
+  android-studio
+  android-sdk
+  android-platform-tools
+)
+
+#brew applications
+brewapps = (
+  gradle
+)
 
 function check {
     # Check OS
@@ -78,16 +63,33 @@ function install () {
         printf "${BLUE} ➜  Installing ${app}...${NORMAL}\n"
         brew cask install ${app}
     done
+
+    for brewapp in ${brewapps[@]}; do
+        printf "${BLUE} ➜  Installing ${brewapp}...${NORMAL}\n"
+        brew install ${app}
+    done
+}
+
+function updateSdk () {
+    touch ~/.android/repositories.cfg
+    yes | sdkmanager --licenses
+    sdkmanager --update
+    sdkmanager --install emulator
+    sdkmanager --install platform-tools
+    sdkmanager --install 'system-images;android-29;google_apis_playstore;x86_64'
+    sdkmanager --install 'extras;intel;Hardware_Accelerated_Execution_Manager'
+    sdkmanager --install 'build-tools;29.0.2'
+    sdkmanager --install 'platforms;android-29' 'platforms;android-28' 
+    sdkmanager --list
 }
 
 function cleanup {
-    brew cask cleanup
+    brew cleanup
 }
 
 function main {
     check
     install
+    updateSdk
     cleanup
 }
-
-main
