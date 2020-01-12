@@ -32,7 +32,8 @@ apps=(
     setapp
     baidunetdisk
     neteasemusic
-    
+    wechat
+    wechatwork
 )
 
 # Use colors, but only if connected to a terminal, and that terminal
@@ -84,7 +85,7 @@ function install () {
 }
 
 function cleanup {
-    brew cask cleanup
+    brew  cleanup
 }
 
 function main {
