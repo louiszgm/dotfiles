@@ -24,15 +24,27 @@ export PATH=${GOPATH//://bin:}/bin:$PATH
 # Rust
 export PATH=$HOME/.cargo/bin:$PATH
 # ======= This is personal env ================
-# Android
-export ANDROID_HOME=$HOME/Library/Android/sdk
-export ANDROID_TOOLS=$ANDROID_HOME/tools
-export ANDROID_PLATFORM_TOOLS=$ANDROID_HOME/platform-tools
-export PATH=$ANDROID_HOME:$ANDROID_TOOLS:$ANDROID_PLATFORM_TOOLS:$PATH
 
-#Java
-export JAVA_HOME=/Applications/Android\ Studio.app/Contents/jre/jdk/Contents/Home
-export PATH=$JAVA_HOME:$JAVA_HOME/bin:$PATH
+# Mac 上用jenv来管理java
+if [[ $OSTYPE == darwin* ]]; then
+    export JAVA_HOME=/Applications/Android\ Studio.app/Contents/jre/jdk/Contents/Home
+    export PATH=$JAVA_HOME:$JAVA_HOME/bin:$PATH
+    #Android
+    export ANDROID_SDK_ROOT=$(brew --prefix)/share/android-sdk
+    export ANDROID_BUILD_TOOLS=$ANDROID_SDK_ROOT/build-tools/$(ls $ANDROID_SDK_ROOT/build-tools | sort | tail -1)
+    export ANDROID_PLATFORM_TOOLS=$ANDROID_SDK_ROOT/platform-tools
+    export PATH=$ANDROID_SDK_ROOT:$ANDROID_NDK_HOME:$ANDROID_PLATFORM_TOOLS:$ANDROID_BUILD_TOOLS:$PATH
+elif [[ $OSTYPE == linux* ]]; then
+    #Linux上的还没有配
+    export JAVA_HOME=/Applications/Android\ Studio.app/Contents/jre/jdk/Contents/Home
+    export PATH=$JAVA_HOME:$JAVA_HOME/bin:$PATH
+    # Android
+    export ANDROID_HOME=$HOME/Library/Android/sdk
+    export ANDROID_TOOLS=$ANDROID_HOME/tools
+    export ANDROID_PLATFORM_TOOLS=$ANDROID_HOME/platform-tools
+    export PATH=$ANDROID_HOME:$ANDROID_TOOLS:$ANDROID_PLATFORM_TOOLS:$PATH
+fi
+
 
 #Flutter
 export Flutter_HOME=$HOME/flutter
