@@ -2,6 +2,8 @@
 #############################################################
 # Install Android Dev Env via brew cask
 # Author: zouguiming <louiszgm@gmail.com>
+
+参考的链接：https://gist.github.com/cemo/02244e9c2c78e4ea7c285305c16411bf
 #############################################################
 
 # Use colors, but only if connected to a terminal, and that terminal
@@ -27,14 +29,13 @@ fi
 
 # Cask applications
 # why not need ndk, see this: https://github.com/Homebrew/homebrew-cask/issues/58883
-caskapps = (
+caskapps=(
   android-studio
   android-sdk
-  android-platform-tools
 )
 
 #brew applications
-brewapps = (
+brewapps=(
   gradle
 )
 
@@ -59,14 +60,14 @@ function check {
 }
 
 function install () {
-    for app in ${apps[@]}; do
+    for app in ${caskapps[@]}; do
         printf "${BLUE} ➜  Installing ${app}...${NORMAL}\n"
         brew cask install ${app}
     done
 
     for brewapp in ${brewapps[@]}; do
         printf "${BLUE} ➜  Installing ${brewapp}...${NORMAL}\n"
-        brew install ${app}
+        brew install ${brewapp}
     done
 }
 
@@ -79,7 +80,7 @@ function updateSdk () {
     sdkmanager --install 'system-images;android-29;google_apis_playstore;x86_64'
     sdkmanager --install 'extras;intel;Hardware_Accelerated_Execution_Manager'
     sdkmanager --install 'build-tools;29.0.2'
-    sdkmanager --install 'platforms;android-29' 'platforms;android-28' 
+    sdkmanager --install 'platforms;android-29' 'platforms;android-28'
     sdkmanager --list
 }
 
@@ -93,3 +94,5 @@ function main {
     updateSdk
     cleanup
 }
+
+main
