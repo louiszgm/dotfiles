@@ -30,7 +30,8 @@ if [[ $OSTYPE == darwin* ]]; then
     export JAVA_HOME=/Applications/Android\ Studio.app/Contents/jre/jdk/Contents/Home
     export PATH=$JAVA_HOME:$JAVA_HOME/bin:$PATH
     #Android
-    export ANDROID_SDK_ROOT=$(brew --prefix)/share/android-sdk
+    #$(brew --prefix) = /usr/local
+    export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
     export ANDROID_BUILD_TOOLS=$ANDROID_SDK_ROOT/build-tools/$(ls $ANDROID_SDK_ROOT/build-tools | sort | tail -1)
     export ANDROID_PLATFORM_TOOLS=$ANDROID_SDK_ROOT/platform-tools
     export PATH=$ANDROID_SDK_ROOT:$ANDROID_NDK_HOME:$ANDROID_PLATFORM_TOOLS:$ANDROID_BUILD_TOOLS:$PATH
