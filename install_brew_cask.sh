@@ -26,12 +26,19 @@ apps=(
 
     # Utilities
     alfred
+    synergy
     1password
     setapp
     baidunetdisk
     neteasemusic
     wechat
     wechatwork
+
+    qlmarkdown
+    quicklook-json
+    qlimagesize
+    quicklook-csv
+    webpquicklook
 )
 
 # Use colors, but only if connected to a terminal, and that terminal

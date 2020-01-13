@@ -8,9 +8,9 @@
 # Go packages
 packages=(
     # For go-mode
-    # github.com/mdempsky/gocode
-    # github.com/rogpeppe/godef
-    # github.com/uudashr/gopkgs/cmd/gopkgs
+    github.com/mdempsky/gocode
+    github.com/rogpeppe/godef
+    github.com/uudashr/gopkgs/cmd/gopkgs
 
     github.com/google/gops
     github.com/go-delve/delve/cmd/dlv

@@ -195,7 +195,7 @@ fi
 
 # Dotfiles
 printf "${BLUE} ➜  Installing Dotfiles...${NORMAL}\n"
-cp -r $HOME/git/dotfiles $DOTFILES
+sync_repo louiszgm/dotfiles $DOTFILES
 
 chmod +x $DOTFILES/install.sh
 chmod +x $DOTFILES/install_brew_cask.sh

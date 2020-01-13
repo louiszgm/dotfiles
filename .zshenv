@@ -25,16 +25,19 @@ export PATH=${GOPATH//://bin:}/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
 # ======= This is personal env ================
 
-# Mac 上用jenv来管理java
 if [[ $OSTYPE == darwin* ]]; then
-    export JAVA_HOME=/Applications/Android\ Studio.app/Contents/jre/jdk/Contents/Home
-    export PATH=$JAVA_HOME:$JAVA_HOME/bin:$PATH
-    #Android
     #$(brew --prefix) = /usr/local
+
+    #mac 已经提供/usr/libexec/java_home工具来管理安装的 JDK
+    export JAVA_HOME=/usr/libexec/java_home -v 1.13
+    export PATH=$JAVA_HOME:$JAVA_HOME/bin:$PATH
+
+    #Android 环境变量可参考 https://developer.android.com/studio/command-line/variables
+    export STUDIO_JDK=/Applications/Android\ Studio.app/Contents/jre/jdk/Contents/Home
     export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
     export ANDROID_BUILD_TOOLS=$ANDROID_SDK_ROOT/build-tools/$(ls $ANDROID_SDK_ROOT/build-tools | sort | tail -1)
     export ANDROID_PLATFORM_TOOLS=$ANDROID_SDK_ROOT/platform-tools
-    export PATH=$ANDROID_SDK_ROOT:$ANDROID_NDK_HOME:$ANDROID_PLATFORM_TOOLS:$ANDROID_BUILD_TOOLS:$PATH
+    export PATH=$ANDROID_SDK_ROOT:$ANDROID_PLATFORM_TOOLS:$ANDROID_BUILD_TOOLS:$PATH
 elif [[ $OSTYPE == linux* ]]; then
     #Linux上的还没有配
     export JAVA_HOME=/Applications/Android\ Studio.app/Contents/jre/jdk/Contents/Home

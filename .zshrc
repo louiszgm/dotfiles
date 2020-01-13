@@ -56,6 +56,23 @@ elif [[ $OSTYPE == linux* ]]; then
         antigen bundle archlinux
     fi
 fi
+
+# Load FZF
+if command -v fzf >/dev/null 2>&1; then
+    if [[ $OSTYPE == cygwin* ]]; then
+        [ -f /etc/profile.d/fzf.zsh ] && source /etc/profile.d/fzf.zsh;
+    else
+        antigen bundle fzf
+        antigen bundle andrewferrier/fzf-z
+    fi
+
+    export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git || git ls-tree -r --name-only HEAD || rg --hidden --files || find ."
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
+    export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
+    export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+fi
+
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zdharma/fast-syntax-highlighting
 # antigen bundle zsh-users/zsh-syntax-highlighting
@@ -81,3 +98,20 @@ alias ec="$EDITOR -n -c"
 alias ef="$EDITOR -c"
 alias te="$EDITOR -a '' -nw"
 alias rte="$EDITOR -e '(let ((last-nonmenu-event nil) (kill-emacs-query-functions nil)) (save-buffers-kill-emacs t))' && te"
+
+# Upgrade
+alias upgrade_repo='git pull --rebase --stat origin master'
+alias upgrade_dotfiles='cd $DOTFILES && upgrade_repo; cd - >/dev/null'
+alias upgrade_emacs='emacs -Q --batch -L "$HOME/.emacs.d/lisp/" -l "init-funcs.el" -l "init-package.el" --eval "(update-config-and-packages t)"'
+alias upgrade_oh_my_tmux='cd $HOME/.tmux && upgrade_repo; cd - >/dev/null'
+alias upgrade_env='upgrade_dotfiles; sh $DOTFILES/install.sh; upgrade_oh_my_tmux; upgrade_oh_my_zsh'
+
+if [[ $OSTYPE == darwin* ]]; then
+    command -v brew >/dev/null 2>&1 && alias upgrade_antigen='brew upgrade antigen'
+    alias upgrade_brew_cask='$DOTFILES/install_brew_cask.sh'
+elif [[ $OSTYPE == linux* ]]; then
+    # (( $+commands[apt-get] )) && apug -y antigen
+    alias upgrade_antigen='sudo curl -o /usr/share/zsh-antigen/antigen.zsh -sL git.io/antigen'
+else
+    alias upgrade_antigen='curl -fsSL git.io/antigen > $ANTIGEN/antigen.zsh.tmp && mv $ANTIGEN/antigen.zsh.tmp $ANTIGEN/antigen.zsh'
+fi

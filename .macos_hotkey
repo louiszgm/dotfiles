@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# Close any open System Preferences panes, to prevent them from overriding
+# settings we’re about to change
+osascript -e 'tell application "System Preferences" to quit'
+
+# Ask for the administrator password upfront
+sudo -v
+
+# disable Input Sources > Select next source in Input menu : Control + Space
+defaults write com.apple.symbolichotkeys.plist AppleSymbolicHotKeys -dict-add 61 "
+  <dict>
+    <key>enabled</key><false/>
+    <key>value</key><dict>
+      <key>type</key><string>standard</string>
+      <key>parameters</key>
+      <array>
+        <integer>32</integer>
+        <integer>49</integer>
+        <integer>786432</integer>
+      </array>
+    </dict>
+  </dict>
+"
+# disable Input Sources > 选择“输入法”菜单中的下一个输入法 : Control + Option + Space
+defaults write com.apple.symbolichotkeys.plist AppleSymbolicHotKeys -dict-add 60 "
+  <dict>
+    <key>enabled</key><false/>
+    <key>value</key><dict>
+      <key>type</key><string>standard</string>
+      <key>parameters</key>
+      <array>
+        <integer>32</integer>
+        <integer>49</integer>
+        <integer>262144</integer>
+      </array>
+    </dict>
+  </dict>
+"
