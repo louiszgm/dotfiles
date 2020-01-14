@@ -28,8 +28,9 @@ export PATH=$HOME/.cargo/bin:$PATH
 if [[ $OSTYPE == darwin* ]]; then
     #$(brew --prefix) = /usr/local
 
-    #mac 已经提供/usr/libexec/java_home工具来管理安装的 JDK
-    export JAVA_HOME=/usr/libexec/java_home -v 1.13
+    # mac 已经提供/usr/libexec/java_home工具来管理安装的 JDK
+    # 通过命令/usr/libexec/java_home -V来查看安装了哪几个 JDK
+    export JAVA_HOME=$(/usr/libexec/java_home -v 13)
     export PATH=$JAVA_HOME:$JAVA_HOME/bin:$PATH
 
     #Android 环境变量可参考 https://developer.android.com/studio/command-line/variables
