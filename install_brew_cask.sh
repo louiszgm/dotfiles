@@ -27,6 +27,7 @@ apps=(
     # Utilities
     alfred
     synergy
+    switchhosts
     1password
     setapp
     baidunetdisk
@@ -75,8 +76,8 @@ function check {
 
         /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-        brew tap caskroom/cask
-        brew tap caskroom/fonts
+        brew tap homebrew/cask-cask
+        brew tap homebrew/cask-fonts
         cd "$(brew --repo)"/Library/Taps/caskroom/homebrew-cask
         git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git
     fi
