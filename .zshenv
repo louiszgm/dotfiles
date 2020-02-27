@@ -23,6 +23,10 @@ export PATH=${GOPATH//://bin:}/bin:$PATH
 
 # Rust
 export PATH=$HOME/.cargo/bin:$PATH
+
+#Python virtualenv
+export VIRTUALEVN_ROOT=$HOME/.virtualenvs
+export PATH=$VIRTUALEVN_ROOT:$PATH
 # ======= This is personal env ================
 
 if [[ $OSTYPE == darwin* ]]; then

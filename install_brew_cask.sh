@@ -21,7 +21,7 @@ apps=(
     # Development
     emacs
     visual-studio-code
-    docker
+    # docker
     java
 
     # Utilities
@@ -29,7 +29,7 @@ apps=(
     synergy
     switchhosts
     1password
-    setapp
+    # setapp
     baidunetdisk
     neteasemusic
     wechat
