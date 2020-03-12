@@ -45,13 +45,13 @@ if [[ $OSTYPE == darwin* ]]; then
     export PATH=$ANDROID_SDK_ROOT:$ANDROID_PLATFORM_TOOLS:$ANDROID_BUILD_TOOLS:$PATH
 elif [[ $OSTYPE == linux* ]]; then
     #Linux上的还没有配
-    export JAVA_HOME=/Applications/Android\ Studio.app/Contents/jre/jdk/Contents/Home
+    export JAVA_HOME=/usr/bin/java
     export PATH=$JAVA_HOME:$JAVA_HOME/bin:$PATH
     # Android
-    export ANDROID_HOME=$HOME/Library/Android/sdk
-    export ANDROID_TOOLS=$ANDROID_HOME/tools
-    export ANDROID_PLATFORM_TOOLS=$ANDROID_HOME/platform-tools
-    export PATH=$ANDROID_HOME:$ANDROID_TOOLS:$ANDROID_PLATFORM_TOOLS:$PATH
+    export ANDROID_SDK_ROOT=/usr/lib/android-sdk
+    export ANDROID_BUILD_TOOLS=$ANDROID_SDK_ROOT/build-tools/$(ls $ANDROID_SDK_ROOT/build-tools | sort | tail -1)
+    export ANDROID_PLATFORM_TOOLS=$ANDROID_SDK_ROOT/platform-tools
+    export PATH=$ANDROID_SDK_ROOT:$ANDROID_PLATFORM_TOOLS:$ANDROID_BUILD_TOOLS:$PATH
 fi
 
 
