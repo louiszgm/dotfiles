@@ -52,6 +52,10 @@ elif [[ $OSTYPE == linux* ]]; then
     export ANDROID_BUILD_TOOLS=$ANDROID_SDK_ROOT/build-tools/$(ls $ANDROID_SDK_ROOT/build-tools | sort | tail -1)
     export ANDROID_PLATFORM_TOOLS=$ANDROID_SDK_ROOT/platform-tools
     export PATH=$ANDROID_SDK_ROOT:$ANDROID_PLATFORM_TOOLS:$ANDROID_BUILD_TOOLS:$PATH
+    # Golang 
+    #  wget https://dl.google.com/go/go1.13.6.linux-amd64.tar.gz
+    #  tar -C /usr/local -xzf go1.13.6.linux-amd64.tar.gz
+    export PATH=$PATH:/usr/local/go/bin
 fi
 
 
