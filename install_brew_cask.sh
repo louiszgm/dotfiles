@@ -8,10 +8,7 @@
 # Cask applications
 apps=(
     cheatsheet
-    fliqlo        # Screen Saver
     iterm2
-    shadowsocksx-ng
-    google-chrome
     # licecap       # Recording screen as gif
     # keycastr      # Show keys on the screen
     # mos           # Smooth and reverse scroll. Alternative: scroll-reverser
@@ -21,19 +18,14 @@ apps=(
     # Development
     emacs
     visual-studio-code
-    # docker
-    java
 
     # Utilities
     alfred
-    synergy
     switchhosts
     1password
     # setapp
     baidunetdisk
-    neteasemusic
     wechat
-    wechatwork
 
     qlmarkdown
     quicklook-json

@@ -7,7 +7,6 @@
 
 # Variables
 DOTFILES=$HOME/.dotfiles
-EMACSD=$HOME/.emacs.d
 FZF=$HOME/.fzf
 TMUX=$HOME/.tmux
 ZSH=$HOME/.antigen
@@ -111,7 +110,6 @@ sync_arch_package() {
 clean_dotfiles() {
     confs="
     .gemrc
-    .gitconfig
     .markdownlint.json
     .npmrc
     .tmux.conf
@@ -124,12 +122,9 @@ clean_dotfiles() {
         [ -f $HOME/${c} ] && mv $HOME/${c} $HOME/${c}.bak
     done
 
-    [ -d $EMACSD ] && mv $EMACSD $EMACSD.bak
-
     rm -rf $ZSH $TMUX $FZF $DOTFILES
 
     rm -f $HOME/.fzf.*
-    rm -f $HOME/.gitignore_global $HOME/.gitconfig_global
     rm -f $HOME/.tmux.conf $HOME/.tmux.local
 }
 
@@ -213,23 +208,9 @@ mkdir -p $HOME/.cargo && cp -n $DOTFILES/cargo.config $HOME/.cargo/config
 cp -n $DOTFILES/.zshrc.local $HOME/.zshrc.local
 mkdir -p $HOME/.pip; cp -n $DOTFILES/.pip.conf $HOME/.pip/pip.conf
 
-ln -sf $DOTFILES/.gitignore_global $HOME/.gitignore_global
-ln -sf $DOTFILES/.gitconfig_global $HOME/.gitconfig_global
-if [ "$SYSTEM" = "Darwin" ]; then
-    cp -n $DOTFILES/.gitconfig_macOS $HOME/.gitconfig
-elif [ "$OSTYPE" = "cygwin" ]; then
-    cp -n $DOTFILES/.gitconfig_cygwin $HOME/.gitconfig
-else
-    cp -n $DOTFILES/.gitconfig_linux $HOME/.gitconfig
-fi
-
 if [ "$OSTYPE" = "cygwin" ]; then
     ln -sf $DOTFILES/.minttyrc $HOME/.minttyrc
 fi
-
-# Emacs Configs
-printf "${BLUE} ➜  Installing Emacs...${NORMAL}\n"
-sync_repo louiszgm/emacs.d $EMACSD
 
 # Oh My Tmux
 printf "${BLUE} ➜  Installing Oh My Tmux...${NORMAL}\n"

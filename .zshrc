@@ -91,14 +91,6 @@ antigen apply
 # Completion enhancements
 source $DOTFILES/completion.zsh
 
-# Emacs
-alias me="emacs -Q --load ~/.emacs.d/init-mini.el" # mini emacs
-alias e="$EDITOR -n"
-alias ec="$EDITOR -n -c"
-alias ef="$EDITOR -c"
-alias te="$EDITOR -a '' -nw"
-alias rte="$EDITOR -e '(let ((last-nonmenu-event nil) (kill-emacs-query-functions nil)) (save-buffers-kill-emacs t))' && te"
-
 # Upgrade
 alias upgrade_repo='git pull --rebase --stat origin master'
 alias upgrade_dotfiles='cd $DOTFILES && upgrade_repo; cd - >/dev/null'
