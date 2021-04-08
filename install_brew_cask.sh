@@ -7,7 +7,6 @@
 
 # Cask applications
 apps=(
-    cheatsheet
     iterm2
     # licecap       # Recording screen as gif
     # keycastr      # Show keys on the screen
