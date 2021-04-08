@@ -78,7 +78,7 @@ function check {
 function install () {
     for app in ${apps[@]}; do
         printf "${BLUE} ➜  Installing ${app}...${NORMAL}\n"
-        brew cask install ${app}
+        brew install --cask ${app}
     done
 }
 
