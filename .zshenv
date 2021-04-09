@@ -38,7 +38,8 @@ if [[ $OSTYPE == darwin* ]]; then
 
     #Android 环境变量可参考 https://developer.android.com/studio/command-line/variables
     export STUDIO_JDK=/Applications/Android\ Studio.app/Contents/jre/jdk/Contents/Home
-    export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
+    #Android stuido 默认安装的sdk位置
+    export ANDROID_SDK_ROOT=$HOME/Library/sdk
     export ANDROID_BUILD_TOOLS=$ANDROID_SDK_ROOT/build-tools/$(ls $ANDROID_SDK_ROOT/build-tools | sort | tail -1)
     export ANDROID_PLATFORM_TOOLS=$ANDROID_SDK_ROOT/platform-tools
     export PATH=$ANDROID_SDK_ROOT:$ANDROID_PLATFORM_TOOLS:$ANDROID_BUILD_TOOLS:$PATH

@@ -31,7 +31,8 @@ fi
 # why not need ndk, see this: https://github.com/Homebrew/homebrew-cask/issues/58883
 caskapps=(
   android-studio
-  android-sdk
+  # sdkmanager 如果安装了studio，直接用自带的。如果不需要studio，则已经独立出来单独的commandline tools
+  # android-sdk
 )
 
 #brew applications
