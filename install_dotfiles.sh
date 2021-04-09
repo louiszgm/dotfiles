@@ -27,16 +27,6 @@ mkdir -p $HOME/.cargo && cp -n $DOTFILES/cargo.config $HOME/.cargo/config
 cp -n $DOTFILES/.zshrc.local $HOME/.zshrc.local
 mkdir -p $HOME/.pip; cp -n $DOTFILES/.pip.conf $HOME/.pip/pip.conf
 
-ln -sf $DOTFILES/.gitignore_global $HOME/.gitignore_global
-ln -sf $DOTFILES/.gitconfig_global $HOME/.gitconfig_global
-if [ "$SYSTEM" = "Darwin" ]; then
-    cp -n $DOTFILES/.gitconfig_macOS $HOME/.gitconfig
-elif [ "$OSTYPE" = "cygwin" ]; then
-    cp -n $DOTFILES/.gitconfig_cygwin $HOME/.gitconfig
-else
-    cp -n $DOTFILES/.gitconfig_linux $HOME/.gitconfig
-fi
-
 if [ "$OSTYPE" = "cygwin" ]; then
     ln -sf $DOTFILES/.minttyrc $HOME/.minttyrc
 fi
