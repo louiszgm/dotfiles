@@ -33,8 +33,8 @@ if [[ $OSTYPE == darwin* ]]; then
 
     # mac 已经提供/usr/libexec/java_home工具来管理安装的 JDK
     # 通过命令/usr/libexec/java_home -V来查看安装了哪几个 JDK
-    export JAVA_HOME=$(/usr/libexec/java_home -v 13)
-    export PATH=$JAVA_HOME:$JAVA_HOME/bin:$PATH
+    # export JAVA_HOME=$(/usr/libexec/java_home -v 13)
+    # export PATH=$JAVA_HOME:$JAVA_HOME/bin:$PATH
 
     #Android 环境变量可参考 https://developer.android.com/studio/command-line/variables
     export STUDIO_JDK=/Applications/Android\ Studio.app/Contents/jre/jdk/Contents/Home
