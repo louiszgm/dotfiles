@@ -37,7 +37,7 @@ command -v python >/dev/null 2>&1 && antigen bundle djui/alias-tips
 
 # OS bundles
 if [[ $OSTYPE == darwin* ]]; then
-    antigen bundle osx
+    antigen bundle macos
     if command -v brew >/dev/null 2>&1; then
         export HOMEBREW_INSTALL_CLEANUP=1
         alias bu='brew update && brew upgrade'
