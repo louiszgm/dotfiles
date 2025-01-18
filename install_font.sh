@@ -59,7 +59,6 @@ sync_repo() {
     fi
 }
 
-
 function check {
     if ! command -v git >/dev/null 2>&1; then
         echo "${RED}Error: git is not installed${NORMAL}" >&2
@@ -79,24 +78,20 @@ function install {
         font_dir="$HOME/Library/Fonts"
 
         fonts=(
-            font-source-code-pro
+            # font-source-code-pro
             # font-dejavu-sans
-            font-inconsolata
+            # font-inconsolata
+            font-cascadia-code
+            font-fira-code
             font-hack-nerd-font
-
-            font-symbola
-
-            font-wenquanyi-micro-hei
-            font-wenquanyi-micro-hei-lite
-            font-wenquanyi-zen-hei
         )
 
         if [ ! -f "${font_dir}/SourceCodePro-Regular.otf" ]; then
             for f in ${fonts[@]}; do
-                brew cask install ${f}
+                brew install ${f}
             done
         fi
-        brew cask cleanup
+        brew cleanup
     elif [ "$SYSTEM" = "Linux" ]; then
         # Linux
         font_dir="$HOME/.local/share/fonts"

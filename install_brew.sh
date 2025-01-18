@@ -1,6 +1,6 @@
 #!/bin/bash
 #############################################################
-# Install packages for Archlinux or its derived editions (e.g. Manjaro).
+# Install macOS via brew cask
 # Author: Vincent Zhang <seagle0128@gmail.com>
 # URL: https://github.com/seagle0128/dotfiles
 #############################################################
@@ -11,17 +11,15 @@ packages=(
     bat
     bottom
     btop
-    delta
+    eza
+    git-delta
     duf
     dust
-    eza
     fd
     fzf
-    git-delta
     gitui
     gping
     hyperfine
-    lsd
     neofetch
     procs
     ripgrep
@@ -52,27 +50,43 @@ else
     NORMAL=""
 fi
 
-function check() {
-    if ! command -v pacman >/dev/null 2>&1; then
-        echo "${RED}Error: not Archlinux or its devrived edition.${NORMAL}" >&2
+function check {
+    # Check OS
+    if [[ $OSTYPE != darwin* ]]; then
+        echo "${RED}Error: only install software via brew on macOS.${NORMAL}" >&2
         exit 1
+    fi
+
+    # Check brew
+    if ! command -v brew >/dev/null 2>&1; then
+        printf "${BLUE} ➜  Installing Homebrew...${NORMAL}\n"
+
+        xcode-select --install
+        /bin/bash -c "$(curl -fsSL https://cdn.jsdelivr.net/gh/Homebrew/install@HEAD/install.sh)"
+
+        if is_arm64; then
+            echo >> $HOME/.zprofile
+            echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        fi
     fi
 }
 
-function install() {
-    printf "\n${BLUE}➜ Refreshing database...${NORMAL}\n"
-    sudo pacman -Syu
-    printf "\n"
-
-    for p in ${packages[@]}; do
-        printf "\n${BLUE}➜ Installing ${p}...${NORMAL}\n"
-        sudo pacman -Sc --needed --noconfirm ${p}
+function install () {
+    for app in ${packages[@]}; do
+        printf "${BLUE} ➜  Installing ${app}...${NORMAL}\n"
+        brew install -q ${app}
     done
 }
 
-function main() {
+function cleanup {
+    brew cleanup
+}
+
+function main {
     check
     install
+    cleanup
 }
 
 main

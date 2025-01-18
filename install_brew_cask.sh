@@ -7,30 +7,53 @@
 
 # Cask applications
 apps=(
-    iterm2
-    # licecap       # Recording screen as gif
-    # keycastr      # Show keys on the screen
-    # mos           # Smooth and reverse scroll. Alternative: scroll-reverser
-    # shiftit       # Window management. Alternative: spectacle
-    # vanilla       # Hide menu bar icons. Alternative: bartender
+    betterdisplay              # Retina display management: avibrazil-rdm
+    captin                     # Caps Lock status
+    cheatsheet
+    maccy                      # Clipboard: clipy
+    maczip                     # Compress & extract
+    fliqlo                     # Screen Saver
+    paper                      # Wallpaper
+    # alt-tab                    # hyperswitch
+    iterm2                     # Terminal
+    keycastr                   # Show keys on the screen
+    licecap                    # Recording screen as gif
+    # rectangle                  # Window management
+    hiddenbar                  # Hide menu bar icons. Alternative: bartender, vanilla
 
-    # Development
-    emacs
-    visual-studio-code
+    karabiner-elements         # karabiner: Keboard remapping
+    # hammersppon                # Ultimate tools
+    # netspot                    # Wifi signal analysis and scanner
+    macfuse                    # File system
+    veracrypt                  # File crypt
+    # foobar2000               # Music player: vox
+    squirrel                   # Pinyin Input: sogouinput
+    # handbrake                  # Video Transcoder: transcoder
 
     # Utilities
-    alfred
-    switchhosts
-    1password
-    # setapp
-    baidunetdisk
-    wechat
+    clash-verge-rev            # Proxy: v2rayx, shadowsocksx-ng-r
+    macgesture                 # Mouse gestures
+    # monitorcontrol             # Controls external display brightness and volume
+    mos                        # Smooth and reverse scroll
+    motrix                     # Downloader: ariang
+    microsoft-edge             # Browser: google-chrome
+    qq wechat
+    tencent-lemon
+    youdaodict youdaonote
 
-    qlmarkdown
-    quicklook-json
-    qlimagesize
-    quicklook-csv
-    webpquicklook
+    # Audio
+    # soundflower soundflowerbed
+
+    # Media player
+    neteasemusic
+    iina
+    listen1                    # yesplaymusic
+    # streammusic zy-player
+
+    # Development
+    # docker                     # optional
+    # fork                       # Git Client: gitkraken, sourcetree
+    visual-studio-code
 )
 
 # Use colors, but only if connected to a terminal, and that terminal
@@ -65,12 +88,9 @@ function check {
     if ! command -v brew >/dev/null 2>&1; then
         printf "${BLUE} ➜  Installing Homebrew and Cask...${NORMAL}\n"
 
-        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
-        brew tap homebrew/cask-cask
-        brew tap homebrew/cask-fonts
-        cd "$(brew --repo)"/Library/Taps/caskroom/homebrew-cask
-        git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git
+        xcode-select --install
+        /bin/bash -c "$(curl -fsSL https://cdn.jsdelivr.net/gh/Homebrew/install@HEAD/install.sh)"
+        brew tap buo/cask-upgrade
     fi
 }
 
@@ -82,7 +102,7 @@ function install () {
 }
 
 function cleanup {
-    brew  cleanup
+    brew cleanup
 }
 
 function main {

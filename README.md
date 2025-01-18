@@ -7,14 +7,14 @@ Thanks for:
 
 ## Prerequisite
 
-- GNU Linux, macOS, Cygwin
-- git, zsh, curl/wget
+- GNU Linux, macOS, Windows, Cygwin
+- Git, Zsh/Powershell, curl/wget
 - Recommend: GNU Emacs, tmux
 - Optional: Vim
 
 ## Quickstart
 
-Run this command in the console.
+### Linux, macOS and Cygwin
 
 ``` shell
 sh -c "$(curl -fsSL https://github.com/louiszgm/dotfiles/raw/master/install.sh)"
@@ -26,6 +26,22 @@ or
 sh -c "$(wget https://github.com/louiszgm/dotfiles/raw/master/install.sh -O -)"
 ```
 
+or
+
+``` shell
+git clone https://github.com/seagle0128/dotfiles.git ~/.dotfiles  # or download the zip package
+cd ~/.dotfiles
+./install.sh
+```
+
+### Windows (Powershell)
+
+``` powershell
+git clone https://github.com/seagle0128/dotfiles.git ~/.dotfiles  # or download the zip package
+cd ~/.dotfiles
+install_scoop.ps1  # or install_choco.ps1
+```
+
 ## Docker
 
 ``` shell
@@ -33,6 +49,15 @@ cd ~/.dotfiles
 docker build -t centaur/ubuntu .
 docker run -it centaur/ubuntu zsh
 ```
+
+## Shortcuts
+
+- `Alt-c`: cd into the selected directory.
+- `Ctrl-r`: Paste the selected command from history into the command line.
+- `Ctrl-t`: Paste the selected file path(s) into the command line.
+- `TAB`: To completions.
+
+That's it. Enjoy!
 
 ## Customization
 
@@ -52,13 +77,16 @@ export PYTHONPATH=/usr/local/lib/python2.7/site-packages
 Set your personal zsh configurations in `~/.zshrc.local`. For example:
 
 ``` shell
-# theme
-antigen theme ys            # ys, dst, steeef, wedisagree, robbyrussell
+# Oh-my-zsh plugin
+zinit snippet OMZP::golang
+zinit snippet OMZP::python
+zinit snippet OMZP::ruby
 
-# plugins
-antigen bundle python
-antigen bundle ruby
+# Github plugin
+zinit light ptavares/zsh-direnv
 ```
+
+See details on [zinit](https://github.com/zdharma-continuum/zinit).
 
 ### Git local config
 

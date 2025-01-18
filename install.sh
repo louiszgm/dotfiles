@@ -9,10 +9,12 @@
 DOTFILES=$HOME/.dotfiles
 FZF=$HOME/.fzf
 TMUX=$HOME/.tmux
-ZSH=$HOME/.antigen
+ZSH=$HOME/.zinit
 
-# Get OS name
-SYSTEM=`uname -s`
+# Get OS informatio
+OS=`uname -s`
+OSREV=`uname -r`
+OSARCH=`uname -m`
 
 # Only enable exit-on-error after the non-critical colorization stuff,
 # which may fail on systems lacking tput or terminfo
@@ -39,19 +41,38 @@ else
     NORMAL=""
 fi
 
-# Check git
-command -v git >/dev/null 2>&1 || {
-    echo "${RED}Error: git is not installed${NORMAL}" >&2
-    exit 1
+# Functions
+is_mac()
+{
+    [ "$OS" = "Darwin" ]
 }
 
-# Check curl
-command -v curl >/dev/null 2>&1 || {
-    echo "${RED}Error: curl is not installed${NORMAL}" >&2
-    exit 1
+is_cygwin()
+{
+    [ "$OSTYPE" = "cygwin" ]
 }
 
-# Sync repository
+is_linux()
+{
+    [ "$OS" = "Linux" ]
+}
+
+is_debian() {
+    command -v apt-get >/dev/null 2>&1
+}
+
+is_arch() {
+    command -v pacman >/dev/null 2>&1
+}
+
+is_x86_64() {
+    [ $(uname -m) = "x86_64" ]
+}
+
+is_arm64() {
+    [ $(uname -m) = "arm64" ]
+}
+
 sync_repo() {
     local repo_uri="$1"
     local repo_path="$2"
@@ -69,63 +90,57 @@ sync_repo() {
     fi
 }
 
-sync_brew_package() {
-    if ! command -v brew >/dev/null 2>&1; then
-        echo "${RED}Error: brew is not installed${NORMAL}" >&2
-        return 1
-    fi
-
+install_package() {
     if ! command -v ${1} >/dev/null 2>&1; then
-        brew install ${1} >/dev/null
+        if is_mac; then
+            brew -q install ${1}
+        elif is_debian; then
+            sudo apt-get install -y ${1}
+        elif is_arch; then
+            pacman -Ssu --noconfirm ${1}
+        elif is_cygwin; then
+            apt-cyg install -y ${1}
+        fi
     else
-        brew upgrade ${1} >/dev/null
+        if is_mac; then
+            brew upgrade -q ${1}
+        elif is_debian; then
+            sudo apt-get upgrade -y ${1}
+        elif is_arch; then
+            pacman -Ssu --noconfirm ${1}
+        elif is_cygwin; then
+            apt-cyg upgrade -y ${1}
+        fi
     fi
 }
 
-sync_apt_package() {
-    if command -v apt >/dev/null 2>&1; then
-        APT=apt
-    elif command -v apt-get >/dev/null 2>&1; then
-        APT=apt-get
-    else
-        echo "${RED}Error: unable to find apt or apt-get${NORMAL}" >&2
-        return 1
-    fi
-
-    if [ ! -z "$APT" ]; then
-        sudo $APT upgrade -y ${1} >/dev/null
-    fi
-}
-
-sync_arch_package() {
-    if ! command -v pacman >/dev/null 2>&1; then
-        echo "${RED}Error: pacman is not installed${NORMAL}" >&2
-        return 1
-    fi
-
-    sudo pacman -S --noconfirm ${1} >/dev/null
-}
-
-# Clean all configurations
 clean_dotfiles() {
     confs="
     .gemrc
-    .markdownlint.json
+    .gitconfig
+    .markdownlintrc
     .npmrc
     .tmux.conf
     .vimrc
     .zshenv
     .zshrc
     .zshrc.local
+    starship.toml
     "
     for c in ${confs}; do
         [ -f $HOME/${c} ] && mv $HOME/${c} $HOME/${c}.bak
     done
 
-    rm -rf $ZSH $TMUX $FZF $DOTFILES
+    if [ -f $HOME/.config/starship.toml ]; then
+        mv $HOME/.config/starship.toml $HOME/.config/starship.toml.bak
+    fi
 
-    rm -f $HOME/.fzf.*
-    rm -f $HOME/.tmux.conf $HOME/.tmux.local
+    [ -d $EMACSD ] && mv $EMACSD $EMACSD.bak
+
+    rm -rf $ZSH $TMUX $DOTFILES
+
+    rm -f $HOME/.gitignore_global
+    rm -f $HOME/.tmux.conf
 }
 
 YES=0
@@ -140,56 +155,74 @@ promote_yn() {
     esac
 }
 
-# Reset configurations
-if [ -d $ZSH ] || [ -d $TMUX ] || [ -d ~$FZF ] || [ -d $EMACSD ]; then
-    promote_yn "Do you want to reset all configurations?" "continue"
+# Clean or not?
+if [ -d $ZSH ] || [ -d $TMUX ] || [ -d $EMACSD ]; then
+    promote_yn "${YELLOW}Do you want to reset all configurations?${NORMAL}" "continue"
     if [ $continue -eq $YES ]; then
         clean_dotfiles
     fi
 fi
 
-# Brew
-if [ "$SYSTEM" = "Darwin" ]; then
-    printf "${BLUE} ➜  Installing Homebrew...${NORMAL}\n"
-    if ! command -v brew >/dev/null 2>&1; then
-        # Install homebrew
-        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
-        # Tap cask and cask-upgrade
-        brew tap homebrew/cask
-        brew tap homebrew/cask-fonts
-        brew tap buo/cask-upgrade
-    fi
+# Generate locale
+if is_linux; then
+    locale -a | grep en_US.utf8 > /dev/null || localedef -v -c -i en_US -f UTF-8 en_US.UTF-8
 fi
 
-# Apt-Cyg
-if [ "$OSTYPE" = "cygwin" ]; then
-    printf "${BLUE} ➜  Installing Apt-Cyg...${NORMAL}\n"
-    if ! command -v apt-cyg >/dev/null 2>&1; then
-        APT_CYG=/usr/local/bin/apt-cyg
-        curl -fsSL https://raw.githubusercontent.com/transcode-open/apt-cyg/master/apt-cyg > $APT_CYG
-        chmod +x $APT_CYG
+# Install Brew/apt-cyg
+if is_mac && ! command -v brew >/dev/null 2>&1; then
+    printf "${GREEN}▓▒░ Installing Homebrew...${NORMAL}\n"
+    # Install homebrew
+
+    # Use mirror
+    export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+    export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
+    export HOMEBREW_INSTALL_FROM_API=1
+
+    # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://cdn.jsdelivr.net/gh/Homebrew/install@HEAD/install.sh)"
+
+    if is_arm64; then
+        echo >> $HOME/.zprofile
+        echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
+        eval "$(/opt/homebrew/bin/brew shellenv)"
     fi
+
+    # Tap cask-upgrade
+    brew tap buo/cask-upgrade
+
+    # Install GNU utilities
+    brew install coreutils
+elif is_cygwin && ! command -v apt-cyg >/dev/null 2>&1; then
+    printf "${GREEN}▓▒░ Installing Apt-Cyg...${NORMAL}\n"
+    APT_CYG=/usr/local/bin/apt-cyg
+    curl -fsSL https://raw.githubusercontent.com/transcode-open/apt-cyg/master/apt-cyg > $APT_CYG
+    chmod +x $APT_CYG
 fi
 
-# Antigen: the plugin manager for zsh
-printf "${BLUE} ➜  Installing Antigen...${NORMAL}\n"
-if [ "$SYSTEM" = "Darwin" ]; then
-    sync_brew_package antigen
-else
-    if command -v apt-get >/dev/null 2>&1; then
-        # sync_apt_package zsh-antigen
-        sudo mkdir -p /usr/share/zsh-antigen && sudo curl -o /usr/share/zsh-antigen/antigen.zsh -sL git.io/antigen
-    elif command -v yaourt >/dev/null 2>&1; then
-        yaourt -S --noconfirm antigen-git
-    else
-        mkdir -p $ZSH
-        curl -fsSL git.io/antigen > $ZSH/antigen.zsh.tmp && mv $ZSH/antigen.zsh.tmp $ZSH/antigen.zsh
-    fi
+# Check git
+if ! command -v git >/dev/null 2>&1; then
+    printf "${GREEN}▓▒░ Installing git...${NORMAL}\n"
+    install_package git
 fi
+
+# Check curl
+if ! command -v curl >/dev/null 2>&1; then
+    printf "${GREEN}▓▒░ Installing curl...${NORMAL}\n"
+    install_package curl
+fi
+
+# Check zsh
+if ! command -v zsh >/dev/null 2>&1; then
+    printf "${GREEN}▓▒░ Installing zsh...${NORMAL}\n"
+    install_package zsh
+fi
+
+# ZSH plugin manager
+printf "${GREEN}▓▒░ Installing Zinit...${NORMAL}\n"
+sh -c "$(curl -fsSL https://git.io/zinit-install)"
 
 # Dotfiles
-printf "${BLUE} ➜  Installing Dotfiles...${NORMAL}\n"
+printf "${GREEN}▓▒░ Installing Dotfiles...${NORMAL}\n"
 sync_repo louiszgm/dotfiles $DOTFILES
 
 chmod +x $DOTFILES/install.sh
@@ -200,104 +233,56 @@ ln -sf $DOTFILES/.zshenv $HOME/.zshenv
 ln -sf $DOTFILES/.zshrc $HOME/.zshrc
 ln -sf $DOTFILES/.vimrc $HOME/.vimrc
 ln -sf $DOTFILES/.tmux.conf.local $HOME/.tmux.conf.local
-ln -sf $DOTFILES/.markdownlint.json $HOME/.markdownlint.json
+ln -sf $DOTFILES/.markdownlintrc $HOME/.markdownlintrc
+ln -sf $DOTFILES/starship.toml $HOME/.config/starship.toml
 
-cp -n $DOTFILES/.npmrc $HOME/.npmrc
-cp -n $DOTFILES/.gemrc $HOME/.gemrc
-mkdir -p $HOME/.cargo && cp -n $DOTFILES/cargo.config $HOME/.cargo/config
-cp -n $DOTFILES/.zshrc.local $HOME/.zshrc.local
-mkdir -p $HOME/.pip; cp -n $DOTFILES/.pip.conf $HOME/.pip/pip.conf
+cp -u $DOTFILES/.npmrc $HOME/.npmrc
+cp -u $DOTFILES/.gemrc $HOME/.gemrc
+mkdir -p $HOME/.cargo && cp -u $DOTFILES/cargo.toml $HOME/.cargo/config.toml
+cp -u $DOTFILES/.zshrc.local $HOME/.zshrc.local
+mkdir -p $HOME/.pip; cp -u $DOTFILES/.pip.conf $HOME/.pip/pip.conf
 
-if [ "$OSTYPE" = "cygwin" ]; then
+ln -sf $DOTFILES/.gitignore_global $HOME/.gitignore_global
+ln -sf $DOTFILES/.gitconfig_global $HOME/.gitconfig_global
+if is_mac; then
+    cp -u $DOTFILES/.gitconfig_macOS $HOME/.gitconfig
+elif is_cygwin; then
+    cp -u $DOTFILES/.gitconfig_cygwin $HOME/.gitconfig
+else
+    cp -u $DOTFILES/.gitconfig_linux $HOME/.gitconfig
+fi
+
+if is_cygwin; then
     ln -sf $DOTFILES/.minttyrc $HOME/.minttyrc
 fi
 
+# Emacs Configurations
+printf "${GREEN}▓▒░ Installing Centaur Emacs...${NORMAL}\n"
+sync_repo seagle0128/.emacs.d $EMACSD
+
 # Oh My Tmux
-printf "${BLUE} ➜  Installing Oh My Tmux...${NORMAL}\n"
+printf "${GREEN}▓▒░ Installing Oh My Tmux...${NORMAL}\n"
 sync_repo gpakosz/.tmux $TMUX
 ln -sf $TMUX/.tmux.conf $HOME/.tmux.conf
 
-# Ripgrep
-printf "${BLUE} ➜  Installing ripgrep (rg)...${NORMAL}\n"
-if [ "$SYSTEM" = "Darwin" ]; then
-    sync_brew_package ripgrep
-elif [ "$SYSTEM" = "Linux" ] && [ "`uname -m`" = "x86_64" ] && command -v dpkg >/dev/null 2>&1; then
-    # sync_apt_package ripgrep
-
-    # Only support Linux x64 binary
-    RG_UPDATE=1
-    RG_RELEASE_URL="https://github.com/BurntSushi/ripgrep/releases"
-    RG_VERSION_PATTERN='[[:digit:]]+\.[[:digit:]]+.[[:digit:]]*'
-
-    RG_RELEASE_TAG=$(curl -fs "${RG_RELEASE_URL}/latest" | grep -oE $RG_VERSION_PATTERN)
-
-    if command -v rg >/dev/null 2>&1; then
-        RG_UPDATE=0
-
-        RG_VERSION=$(rg --version | grep -oE $RG_VERSION_PATTERN)
-        if [ "$RG_VERSION" != "$RG_RELEASE_TAG" ]; then
-            RG_UPDATE=1
-        fi
-    fi
-
-    if [ $RG_UPDATE -eq 1 ]; then
-        curl -LO ${RG_RELEASE_URL}/download/${RG_RELEASE_TAG}/ripgrep_${RG_RELEASE_TAG}_amd64.deb &&
-            sudo dpkg -i ripgrep_${RG_RELEASE_TAG}_amd64.deb
-        rm -f ripgrep_${RG_RELEASE_TAG}_amd64.deb
-    fi
-fi
-
-# FD
-printf "${BLUE} ➜  Installing FD...${NORMAL}\n"
-if [ "$SYSTEM" = "Darwin" ]; then
-    sync_brew_package fd
-elif [ "$SYSTEM" = "Linux" ] && command -v apt-get >/dev/null 2>&1; then
-    # sync_apt_package fd-find
-
-    # Only support Linux x64 binary
-    FD_UPDATE=1
-    FD_RELEASE_URL="https://github.com/sharkdp/fd/releases"
-    FD_VERSION_PATTERN='[[:digit:]]+\.[[:digit:]]+.[[:digit:]]*'
-
-    FD_RELEASE_TAG=$(curl -fs "${FD_RELEASE_URL}/latest" | grep -oE $FD_VERSION_PATTERN)
-
-    if command -v fd >/dev/null 2>&1; then
-        FD_UPDATE=0
-
-        FD_VERSION=$(fd --version | grep -oE $FD_VERSION_PATTERN)
-        if [ "$FD_VERSION" != "$FD_RELEASE_TAG" ]; then
-            FD_UPDATE=1
-        fi
-    fi
-
-    if [ $FD_UPDATE -eq 1 ]; then
-        curl -LO ${FD_RELEASE_URL}/download/v${FD_RELEASE_TAG}/fd_${FD_RELEASE_TAG}_amd64.deb &&
-            sudo dpkg -i fd_${FD_RELEASE_TAG}_amd64.deb
-        rm -f fd_${FD_RELEASE_TAG}_amd64.deb
-    fi
-fi
-
-# FZF
-printf "${BLUE} ➜  Installing FZF...${NORMAL}\n"
-if [ "$OSTYPE" = "cygwin" ]; then
-    if ! command -v fzf >/dev/null 2>&1 && command -v apt-cyg >/dev/null 2>&1; then
-        apt-cyg install fzf fzf-zsh fzf-zsh-completion
-    fi
+# Packages
+printf "${GREEN}▓▒░ Installing packages...${NORMAL}\n"
+if is_mac; then
+    ./install_brew.sh
+elif is_arch; then
+    ./install_arch.sh
+elif is_debian; then
+    ./install_debian.sh
 else
-    if [ "$SYSTEM" = "Darwin" ]; then
-        sync_brew_package fzf
-    elif [ "$SYSTEM" = "Linux" ] && command -v apt-get >/dev/null 2>&1; then
-        sync_repo junegunn/fzf $FZF
-    fi
-    # [ -f $FZF/install ] && $FZF/install --all --no-update-rc --no-bash --no-fish >/dev/null
+    printf "Noting to install!"
 fi
 
 # Entering zsh
-printf "Done. Enjoy!\n"
+printf "${GREEN}▓▒░ Done. Enjoy!${NORMAL}\n"
 if command -v zsh >/dev/null 2>&1; then
-    if [ "$OSTYPE" != "cygwin" ] && [ "$SHELL" != "$(which zsh)" ]; then
+    if is_cygwin && [ "$SHELL" != "$(which zsh)" ]; then
         chsh -s $(which zsh)
-        printf "${BLUE} You need to logout and login to enable zsh as the default shell.${NORMAL}\n"
+        printf "${GREEN} You need to logout and login to enable zsh as the default shell.${NORMAL}\n"
     fi
     env zsh
 else

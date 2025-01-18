@@ -1,29 +1,47 @@
 #!/bin/bash
 #############################################################
-# Install and update packages for ubuntu or its derived editions.
+# Install packages for Debian or its derived editions (e.g. Ubuntu, Mint).
+# Support Ubuntu 24.04+
 # Author: Vincent Zhang <seagle0128@gmail.com>
 # URL: https://github.com/seagle0128/dotfiles
 #############################################################
 
 # Packages
 packages=(
+    # prerequisite
     build-essential
-    git
-    zsh
+
+    # modern tools
+    bat
+    btm
+    btop
+    duf
+    # dust
+    eza                         # exa
+    fd-find
+    fzf
+    git-delta
+    tig                         # gitui
+    gping
+    hyperfine
+    neofetch
+    # procs
+    ripgrep
+    # sd
+    # tealdeer
+    zoxide
 
     # sudo add-apt-repository -y ppa:kelleyk/emacs
-    emacs26                     # emacs-snapshot
+    # emacs                       # emacs-snapshot
 
     aspell                      # hunspell
-    parcellite                  # clipit
-    peek
-    screenkey
-
-    neofetch                    # screenfetch
+    # parcellite                  # clipit
+    # peek
+    # screenkey
 
     # Quick launcher: synapse/albert/Ulauncher
     # sudo add-apt-repository ppa:agornostal/ulauncher
-    ulauncher
+    # ulauncher
 )
 
 # Get OS name
@@ -63,7 +81,7 @@ function check {
     fi
 
     if [ ! "$SYSTEM" = "Linux" ] || [ -z "$APT" ]; then
-        echo "${RED}Error: Not Ubuntu or its derived edition${NORMAL}" >&2
+        echo "${RED}Error: Not Debian or its derived edition${NORMAL}" >&2
         exit 1
     fi
 }
