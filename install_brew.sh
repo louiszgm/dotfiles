@@ -8,22 +8,22 @@
 # Packages
 packages=(
     # modern tools
-    bat
-    bottom
-    btop
-    eza
+    # bat #cat 的增强版，支持语法高亮和 Git 集成
+    # bottom #系统资源监控工具，类似 top，但界面更现代化。
+    # btop 另一个系统监控工具，支持更丰富的图形化界面
+    # eza ls 的现代替代品，支持图标、颜色和更多信息
     git-delta
-    duf
-    dust
+    #duf
+    #dust
     fd
     fzf
-    gitui
+    #gitui
     gping
-    hyperfine
-    neofetch
-    procs
+    #hyperfine
+    #neofetch
+    #procs
     ripgrep
-    sd
+    #sd
     starship
     tealdeer
     zoxide

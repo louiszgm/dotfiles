@@ -134,9 +134,7 @@ clean_dotfiles() {
     if [ -f $HOME/.config/starship.toml ]; then
         mv $HOME/.config/starship.toml $HOME/.config/starship.toml.bak
     fi
-
-    [ -d $EMACSD ] && mv $EMACSD $EMACSD.bak
-
+    
     rm -rf $ZSH $TMUX $DOTFILES
 
     rm -f $HOME/.gitignore_global
@@ -255,15 +253,6 @@ fi
 if is_cygwin; then
     ln -sf $DOTFILES/.minttyrc $HOME/.minttyrc
 fi
-
-# Emacs Configurations
-printf "${GREEN}▓▒░ Installing Centaur Emacs...${NORMAL}\n"
-sync_repo seagle0128/.emacs.d $EMACSD
-
-# Oh My Tmux
-printf "${GREEN}▓▒░ Installing Oh My Tmux...${NORMAL}\n"
-sync_repo gpakosz/.tmux $TMUX
-ln -sf $TMUX/.tmux.conf $HOME/.tmux.conf
 
 # Packages
 printf "${GREEN}▓▒░ Installing packages...${NORMAL}\n"
