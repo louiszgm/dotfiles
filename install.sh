@@ -234,20 +234,33 @@ ln -sf $DOTFILES/.tmux.conf.local $HOME/.tmux.conf.local
 ln -sf $DOTFILES/.markdownlintrc $HOME/.markdownlintrc
 ln -sf $DOTFILES/starship.toml $HOME/.config/starship.toml
 
-cp -u $DOTFILES/.npmrc $HOME/.npmrc
-cp -u $DOTFILES/.gemrc $HOME/.gemrc
-mkdir -p $HOME/.cargo && cp -u $DOTFILES/cargo.toml $HOME/.cargo/config.toml
-cp -u $DOTFILES/.zshrc.local $HOME/.zshrc.local
-mkdir -p $HOME/.pip; cp -u $DOTFILES/.pip.conf $HOME/.pip/pip.conf
+# 确保目标目录存在
+mkdir -p $HOME/.config
+
+# 创建符号链接
+ln -sf $DOTFILES/starship.toml $HOME/.config/starship.toml
+
+# 使用兼容选项复制文件
+cp -f $DOTFILES/.npmrc $HOME/.npmrc
+cp -f $DOTFILES/.gemrc $HOME/.gemrc
+mkdir -p $HOME/.cargo && cp -f $DOTFILES/cargo.toml $HOME/.cargo/config.toml
+cp -f $DOTFILES/.zshrc.local $HOME/.zshrc.local
+mkdir -p $HOME/.pip; cp -f $DOTFILES/.pip.conf $HOME/.pip/pip.conf
+
+cp -f $DOTFILES/.npmrc $HOME/.npmrc
+cp -f $DOTFILES/.gemrc $HOME/.gemrc
+mkdir -p $HOME/.cargo && cp -f $DOTFILES/cargo.toml $HOME/.cargo/config.toml
+cp -f $DOTFILES/.zshrc.local $HOME/.zshrc.local
+mkdir -p $HOME/.pip; cp -f $DOTFILES/.pip.conf $HOME/.pip/pip.conf
 
 ln -sf $DOTFILES/.gitignore_global $HOME/.gitignore_global
 ln -sf $DOTFILES/.gitconfig_global $HOME/.gitconfig_global
 if is_mac; then
-    cp -u $DOTFILES/.gitconfig_macOS $HOME/.gitconfig
+    cp -f $DOTFILES/.gitconfig_macOS $HOME/.gitconfig
 elif is_cygwin; then
-    cp -u $DOTFILES/.gitconfig_cygwin $HOME/.gitconfig
+    cp -f $DOTFILES/.gitconfig_cygwin $HOME/.gitconfig
 else
-    cp -u $DOTFILES/.gitconfig_linux $HOME/.gitconfig
+    cp -f $DOTFILES/.gitconfig_linux $HOME/.gitconfig
 fi
 
 if is_cygwin; then
