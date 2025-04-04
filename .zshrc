@@ -30,6 +30,15 @@ zinit for \
       OMZL::theme-and-appearance.zsh \
       OMZP::common-aliases
 
+# Completion enhancements
+zinit wait lucid depth"1" for \
+      atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+      zdharma-continuum/fast-syntax-highlighting \
+      blockf \
+      zsh-users/zsh-completions \
+      atload"!_zsh_autosuggest_start" \
+      zsh-users/zsh-autosuggestions
+
 # Local customizations, e.g. theme, plugins, aliases, etc.
 [ -f $HOME/.zshrc.local ] && source $HOME/.zshrc.local
 # bun completions
