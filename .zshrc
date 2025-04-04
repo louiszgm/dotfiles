@@ -35,7 +35,7 @@ zinit for \
 # bun completions
 [ -s "/Users/zouguiming/.bun/_bun" ] && source "/Users/zouguiming/.bun/_bun"
 
-# bun
+# bun Bun is an all-in-one JavaScript runtime & toolkit designed for speed
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
@@ -57,4 +57,3 @@ if [ -f "/opt/homebrew/Caskroom/miniforge/base/etc/profile.d/mamba.sh" ]; then
     . "/opt/homebrew/Caskroom/miniforge/base/etc/profile.d/mamba.sh"
 fi
 # <<< conda initialize <<<
-
