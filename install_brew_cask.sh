@@ -7,53 +7,40 @@
 
 # Cask applications
 apps=(
-    betterdisplay              # Retina display management: avibrazil-rdm
-    captin                     # Caps Lock status
-    cheatsheet
-    maccy                      # Clipboard: clipy
+#    betterdisplay              # Retina display management: avibrazil-rdm
+#   captin                     # Caps Lock status
+#    cheatsheet
+#    maccy                      # Clipboard: clipy
     maczip                     # Compress & extract
-    fliqlo                     # Screen Saver
-    paper                      # Wallpaper
+#    fliqlo                     # Screen Saver
+#    paper                      # Wallpaper
     # alt-tab                    # hyperswitch
     iterm2                     # Terminal
-    keycastr                   # Show keys on the screen
-    licecap                    # Recording screen as gif
+#    keycastr                   # Show keys on the screen
+#    licecap                    # Recording screen as gif
     # rectangle                  # Window management
-    hiddenbar                  # Hide menu bar icons. Alternative: bartender, vanilla
+#    hiddenbar                  # Hide menu bar icons. Alternative: bartender, vanilla
 
-    karabiner-elements         # karabiner: Keboard remapping
+#    karabiner-elements         # karabiner: Keboard remapping
     # hammersppon                # Ultimate tools
     # netspot                    # Wifi signal analysis and scanner
-    macfuse                    # File system
-    veracrypt                  # File crypt
+ #   macfuse                    # File system
+ #   veracrypt                  # File crypt
     # foobar2000               # Music player: vox
-    squirrel                   # Pinyin Input: sogouinput
+#    squirrel                   # Pinyin Input: sogouinput
     # handbrake                  # Video Transcoder: transcoder
 
     # Utilities
-    clash-verge-rev            # Proxy: v2rayx, shadowsocksx-ng-r
-    macgesture                 # Mouse gestures
+#    clash-verge-rev            # Proxy: v2rayx, shadowsocksx-ng-r
+#   macgesture                 # Mouse gestures
     # monitorcontrol             # Controls external display brightness and volume
-    mos                        # Smooth and reverse scroll
+#    mos                        # Smooth and reverse scroll
     motrix                     # Downloader: ariang
-    microsoft-edge             # Browser: google-chrome
-    qq wechat
-    tencent-lemon
-    youdaodict youdaonote
+#    microsoft-edge             # Browser: google-chrome
+#    qq wechat
+#    tencent-lemon
+#    youdaodict youdaonote
 
-    # Audio
-    # soundflower soundflowerbed
-
-    # Media player
-    neteasemusic
-    iina
-    listen1                    # yesplaymusic
-    # streammusic zy-player
-
-    # Development
-    # docker                     # optional
-    # fork                       # Git Client: gitkraken, sourcetree
-    visual-studio-code
 )
 
 # Use colors, but only if connected to a terminal, and that terminal
