@@ -39,6 +39,9 @@ zinit wait lucid depth"1" for \
       atload"!_zsh_autosuggest_start" \
       zsh-users/zsh-autosuggestions
 
+zinit wait lucid light-mode depth"1" for \
+      zsh-users/zsh-history-substring-search
+
 # Local customizations, e.g. theme, plugins, aliases, etc.
 [ -f $HOME/.zshrc.local ] && source $HOME/.zshrc.local
 # bun completions
