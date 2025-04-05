@@ -44,12 +44,6 @@ zinit wait lucid light-mode depth"1" for \
 
 # Local customizations, e.g. theme, plugins, aliases, etc.
 [ -f $HOME/.zshrc.local ] && source $HOME/.zshrc.local
-# bun completions
-[ -s "/Users/zouguiming/.bun/_bun" ] && source "/Users/zouguiming/.bun/_bun"
-
-# bun Bun is an all-in-one JavaScript runtime & toolkit designed for speed
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
